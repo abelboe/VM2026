@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kulturenhetens VM-tipping 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0b1120;
+    --surface: #151f35;
+    --surface2: #1c2a42;
+    --border: #263352;
+    --text: #e2eaf7;
+    --muted: #7a91b8;
+    --faint: #3d517a;
+    --gold: #f7c948;
+    --indigo: #6574f0;
+    --teal: #2dd4a0;
+    --orange: #f97316;
+    --red: #f25c5c;
+    --purple: #a78bfa;
+    --sky: #38bdf8;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+
+  header {
+    text-align: center;
+    padding: 28px 16px 16px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0d1827 0%, var(--bg) 100%);
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  header h1 span { color: var(--gold); }
+
+  .subtitle {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .leader-badge {
+    display: inline-block;
+    margin-top: 10px;
+    background: linear-gradient(90deg, #2a2200, #3d3400);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 100px;
+    letter-spacing: 0.3px;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  nav button {
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+
+  nav button.active {
+    background: var(--indigo);
+    border-color: var(--indigo);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  nav button:hover:not(.active) {
+    border-color: var(--indigo);
+    color: var(--text);
+  }
+
+  /* CONTENT */
+  .page { display: none; padding: 20px 16px 40px; max-width: 700px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  h2 { font-size: 1rem; color: var(--text); margin-bottom: 4px; font-weight: 700; }
+  .page-hint { font-size: 0.72rem; color: var(--muted); margin-bottom: 16px; }
+
+  /* CHART */
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .chart-wrap canvas { display: block; }
+  .chart-tall { height: 900px; }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+  /* FACT CARDS */
+  .fact-sub-nav {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .fact-sub-nav button {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .fact-sub-nav button.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #0b1120;
+    font-weight: 700;
+  }
+
+  .fact-sub-nav button:hover:not(.active) {
+    border-color: var(--gold);
+    color: var(--text);
+  }
+
+  .fact-section { display: none; }
+  .fact-section.active { display: flex; flex-direction: column; gap: 11px; }
+
+  .fact-card {
+    background: var(--surface);
+    border-radius: 11px;
+    padding: 13px 14px;
+    border-left: 4px solid var(--indigo);
+  }
+
+  .fact-card .fact-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+  }
+
+  .fact-card .fact-emoji { font-size: 1.15rem; }
+
+  .fact-card .fact-title {
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+
+  .fact-card p {
+    font-size: 0.81rem;
+    color: #b8c9e0;
+    line-height: 1.55;
+  }
+
+  .fact-card p b { color: var(--text); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚽ Kulturenhetens VM-<span>tipping</span> 2026</h1>
+  <p class="subtitle">Etter 12, 24 og 36 kamper</p>
+  <div class="leader-badge">🥇 Lars, Andreas og Anniken leder med 22 poeng!</div>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('oversikt', this)">📊 Oversikt</button>
+  <button onclick="showPage('periode', this)">🔥 Per periode</button>
+  <button onclick="showPage('klatring', this)">📈 Klatring</button>
+  <button onclick="showPage('fakta', this)">🎉 Fun facts</button>
+</nav>
+
+<!-- OVERSIKT -->
+<div class="page active" id="page-oversikt">
+  <h2>Poeng etter 12, 24 og 36 kamper</h2>
+  <p class="page-hint">Sortert etter nåværende plassering</p>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:#6574f0"></span>12 kamper</span>
+    <span><span class="legend-dot" style="background:#f7c948"></span>24 kamper</span>
+    <span><span class="legend-dot" style="background:#2dd4a0"></span>36 kamper</span>
+  </div>
+  <div class="chart-wrap chart-tall">
+    <canvas id="chartOversikt"></canvas>
+  </div>
+</div>
+
+<!-- PERIODE -->
+<div class="page" id="page-periode">
+  <h2>Poeng per periode</h2>
+  <p class="page-hint">Hva scoret alle i kamp 1–12, 13–24 og 25–36?</p>
+  <div class="legend">
+    <span><span class="legend-dot" style="background:#6574f0"></span>Periode 1</span>
+    <span><span class="legend-dot" style="background:#f7c948"></span>Periode 2</span>
+    <span><span class="legend-dot" style="background:#2dd4a0"></span>Periode 3</span>
+  </div>
+  <div class="chart-wrap chart-tall">
+    <canvas id="chartPeriode"></canvas>
+  </div>
+</div>
+
+<!-- KLATRING -->
+<div class="page" id="page-klatring">
+  <h2>Plassendring – siste periode (24 → 36)</h2>
+  <p class="page-hint">Positiv = klatret opp · Negativ = rykket ned</p>
+  <div class="chart-wrap chart-tall">
+    <canvas id="chartKlatring"></canvas>
+  </div>
+</div>
+
+<!-- FAKTA -->
+<div class="page" id="page-fakta">
+  <h2>Fun facts</h2>
+  <p class="page-hint">Velg periode for å se fakta</p>
+
+  <div class="fact-sub-nav">
+    <button class="active" onclick="showFacts('f12', this)">12 kamper</button>
+    <button onclick="showFacts('f24', this)">24 kamper</button>
+    <button onclick="showFacts('f36', this)">36 kamper</button>
+    <button onclick="showFacts('falt', this)">Helhetlig</button>
+  </div>
+
+  <!-- 12 kamper -->
+  <div class="fact-section active" id="fact-f12">
+    <div class="fact-card" style="border-color:#f7c948">
+      <div class="fact-head"><span class="fact-emoji">👑</span><span class="fact-title" style="color:#f7c948">Leder etter 12 kamper</span></div>
+      <p><b>Stine</b> topper tabellen med <b>9 poeng</b> – alene i front og et poeng foran de to neste. En solid start.</p>
+    </div>
+    <div class="fact-card" style="border-color:#f25c5c">
+      <div class="fact-head"><span class="fact-emoji">🐢</span><span class="fact-title" style="color:#f25c5c">Sist etter 12 kamper</span></div>
+      <p><b>Marte, Odd Reidar, Janne og Anne H</b> deler bunnplassen med bare <b>3 poeng</b>. Fire stykker på siste plass – mye å ta igjen.</p>
+    </div>
+    <div class="fact-card" style="border-color:#38bdf8">
+      <div class="fact-head"><span class="fact-emoji">🏘️</span><span class="fact-title" style="color:#38bdf8">Masseopphopning i midten</span></div>
+      <p>Hele <b>10 deltakere</b> har <b>6 poeng</b> – nesten halvparten av feltet på én og samme plass!</p>
+    </div>
+    <div class="fact-card" style="border-color:#a78bfa">
+      <div class="fact-head"><span class="fact-emoji">📏</span><span class="fact-title" style="color:#a78bfa">Avstand topp til bunn</span></div>
+      <p>Fra <b>9</b> (topp) til <b>3</b> (bunn) er det bare <b>6 poeng</b>. Veldig jevnt felt allerede tidlig!</p>
+    </div>
+    <div class="fact-card" style="border-color:#2dd4a0">
+      <div class="fact-head"><span class="fact-emoji">😬</span><span class="fact-title" style="color:#2dd4a0">Dobbelt så langt ned</span></div>
+      <p>De som har 3 poeng har dobbelt så langt opp til lederen som lederen har ned til dem. En god illustrasjon på hvordan tipping fungerer – ett bom-resultat koster mye.</p>
+    </div>
+  </div>
+
+  <!-- 24 kamper -->
+  <div class="fact-section" id="fact-f24">
+    <div class="fact-card" style="border-color:#f7c948">
+      <div class="fact-head"><span class="fact-emoji">👑</span><span class="fact-title" style="color:#f7c948">Leder etter 24 kamper</span></div>
+      <p><b>Stine</b> holder seg suverent på topp med <b>16 poeng</b> – 2 foran de neste. Ingen har tatt henne igjen ennå.</p>
+    </div>
+    <div class="fact-card" style="border-color:#f25c5c">
+      <div class="fact-head"><span class="fact-emoji">📉</span><span class="fact-title" style="color:#f25c5c">Dramatisk fall</span></div>
+      <p><b>Sissel</b> gikk fra 2. til 20. plass – et fall på <b>18 plasser</b> på bare 12 kamper. Den største enkeltkollapsen i perioden.</p>
+    </div>
+    <div class="fact-card" style="border-color:#2dd4a0">
+      <div class="fact-head"><span class="fact-emoji">🚀</span><span class="fact-title" style="color:#2dd4a0">Beste periode 2</span></div>
+      <p><b>Julie, Marte, Marit K og Anne H</b> scoret alle <b>8 poeng</b> i kamp 13–24. Felles best i runden!</p>
+    </div>
+    <div class="fact-card" style="border-color:#6574f0">
+      <div class="fact-head"><span class="fact-emoji">📈</span><span class="fact-title" style="color:#6574f0">Største klatring</span></div>
+      <p><b>Marit K</b> hoppet fra 22. til 12. plass – <b>10 plasser opp</b> i løpet av én periode. Imponerende comeback.</p>
+    </div>
+    <div class="fact-card" style="border-color:#38bdf8">
+      <div class="fact-head"><span class="fact-emoji">🏘️</span><span class="fact-title" style="color:#38bdf8">Trafikken i midten</span></div>
+      <p>Hele <b>9 personer</b> deler 12. plass med <b>12 poeng</b>. Det er nesten halvparten av feltet på samme trinn!</p>
+    </div>
+    <div class="fact-card" style="border-color:#f97316">
+      <div class="fact-head"><span class="fact-emoji">🐢</span><span class="fact-title" style="color:#f97316">Sist etter 24 kamper</span></div>
+      <p><b>Janne</b> alene på siste plass med 7 poeng. <b>Odd Reidar</b> er nest sist med 9. Det begynner å se mørkt ut.</p>
+    </div>
+  </div>
+
+  <!-- 36 kamper -->
+  <div class="fact-section" id="fact-f36">
+    <div class="fact-card" style="border-color:#f7c948">
+      <div class="fact-head"><span class="fact-emoji">🥇</span><span class="fact-title" style="color:#f7c948">Trippel-topp!</span></div>
+      <p><b>Lars, Andreas og Anniken</b> deler ledelsen med <b>22 poeng</b>. Tre folk på topp – jevnere kan det knapt bli!</p>
+    </div>
+    <div class="fact-card" style="border-color:#f25c5c">
+      <div class="fact-head"><span class="fact-emoji">📉</span><span class="fact-title" style="color:#f25c5c">Stine velter av tronen</span></div>
+      <p><b>Stine</b> ledet suverent to runder på rad, men scorer bare <b>5 poeng</b> i periode 3 og faller til 4. plass.</p>
+    </div>
+    <div class="fact-card" style="border-color:#f97316">
+      <div class="fact-head"><span class="fact-emoji">💥</span><span class="fact-title" style="color:#f97316">Trygves kollaps</span></div>
+      <p><b>Trygve</b> hadde 2. plass etter 24 kamper, men scoret kun <b>3 poeng</b> i periode 3 og raste til <b>22. plass</b>. Fritt fall.</p>
+    </div>
+    <div class="fact-card" style="border-color:#2dd4a0">
+      <div class="fact-head"><span class="fact-emoji">🚀</span><span class="fact-title" style="color:#2dd4a0">Beste periode 3</span></div>
+      <p><b>Lars, Anniken og Andreas</b> scoret alle <b>9 poeng</b> i kamp 25–36. Felles best – og det er nettopp det som skjøt dem til topps.</p>
+    </div>
+    <div class="fact-card" style="border-color:#38bdf8">
+      <div class="fact-head"><span class="fact-emoji">🏘️</span><span class="fact-title" style="color:#38bdf8">Galskap i midten</span></div>
+      <p><b>6 spillere</b> deler 4. plass med 21 poeng. Over halvparten av feltet befinner seg mellom 18 og 22 poeng. Ekstremt jevnt!</p>
+    </div>
+    <div class="fact-card" style="border-color:#6574f0">
+      <div class="fact-head"><span class="fact-emoji">📈</span><span class="fact-title" style="color:#6574f0">Størst opphenting</span></div>
+      <p><b>Marte</b> lå på 24. plass etter 12 kamper og er nå på 16. plass. En stille og stødig klatring hele veien.</p>
+    </div>
+    <div class="fact-card" style="border-color:#7a91b8">
+      <div class="fact-head"><span class="fact-emoji">⚠️</span><span class="fact-title" style="color:#7a91b8">Bunnen henger igjen</span></div>
+      <p><b>Janne</b> og <b>Odd Reidar</b> deler siste plass med <b>14 poeng</b> – 8 bak ledertrioen. Med 36 kamper igjen er det ikke håpløst, men det trengs store ting.</p>
+    </div>
+  </div>
+
+  <!-- Helhetlig -->
+  <div class="fact-section" id="fact-falt">
+    <div class="fact-card" style="border-color:#f7c948">
+      <div class="fact-head"><span class="fact-emoji">🏆</span><span class="fact-title" style="color:#f7c948">Mest konsistent leder</span></div>
+      <p><b>Stine</b> ledet etter 12 og 24 kamper, og er nå på 4. plass. Ingen andre har ledet to runder på rad – Stine er den mest konsistente toppkandidaten.</p>
+    </div>
+    <div class="fact-card" style="border-color:#f25c5c">
+      <div class="fact-head"><span class="fact-emoji">🎢</span><span class="fact-title" style="color:#f25c5c">Mest berg-og-dalbane</span></div>
+      <p><b>Sissel</b>: 2. → 20. → 19. plass. <b>Trygve</b>: 4. → 2. → 22. plass. To helt ulike reiser, men begge har sett himmel og krise i løpet av 36 kamper.</p>
+    </div>
+    <div class="fact-card" style="border-color:#2dd4a0">
+      <div class="fact-head"><span class="fact-emoji">📈</span><span class="fact-title" style="color:#2dd4a0">Best samlet klatring</span></div>
+      <p><b>Marte</b> gikk fra 24. plass etter 12 kamper til 16. plass nå – en netto klatring på <b>8 plasser</b> totalt. Jevn og stødig forbedring.</p>
+    </div>
+    <div class="fact-card" style="border-color:#f97316">
+      <div class="fact-head"><span class="fact-emoji">📉</span><span class="fact-title" style="color:#f97316">Størst totalt fall</span></div>
+      <p><b>Trygve</b> gikk fra 4. plass etter 12 kamper til 22. plass nå – et fall på <b>18 plasser</b>. Det er rekord i negativ retning.</p>
+    </div>
+    <div class="fact-card" style="border-color:#6574f0">
+      <div class="fact-head"><span class="fact-emoji">🔥</span><span class="fact-title" style="color:#6574f0">Varmest siste periode</span></div>
+      <p><b>Lars, Andreas og Anniken</b> er de tre heteste akkurat nå – alle med 9 poeng i periode 3. De som skrudde opp farten på rett tidspunkt.</p>
+    </div>
+    <div class="fact-card" style="border-color:#38bdf8">
+      <div class="fact-head"><span class="fact-emoji">🧊</span><span class="fact-title" style="color:#38bdf8">Kaldest siste periode</span></div>
+      <p><b>Trygve og Evy</b> scoret bare <b>3 poeng</b> i periode 3. Det er kaldt i den enden av statistikken.</p>
+    </div>
+    <div class="fact-card" style="border-color:#a78bfa">
+      <div class="fact-head"><span class="fact-emoji">🎯</span><span class="fact-title" style="color:#a78bfa">Aldri vært i bunn</span></div>
+      <p><b>Stine</b> har aldri vært under 4. plass i noen av de tre rundene. Den mest stabile plasseringen over tid.</p>
+    </div>
+    <div class="fact-card" style="border-color:#7a91b8">
+      <div class="fact-head"><span class="fact-emoji">😬</span><span class="fact-title" style="color:#7a91b8">Aldri vært i topp 10</span></div>
+      <p><b>Janne</b> og <b>Odd Reidar</b> har ikke vært inne i topp 10 i noen av de tre rundene. Konsekvent i bunnsjiktet.</p>
+    </div>
+    <div class="fact-card" style="border-color:#2dd4a0">
+      <div class="fact-head"><span class="fact-emoji">🔭</span><span class="fact-title" style="color:#2dd4a0">Hvem kan vinne?</span></div>
+      <p>Med 36 kamper igjen og bare <b>2 poeng</b> mellom 1. og 10. plass, er dette helt åpent. Alle i topp 15 har en reell sjanse!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const navn = ["Lars","Andreas","Anniken","Harald","Sanne","Mari K","Katrine","Stine","John H","Eva","Kjetil","Martin","Pål Tore","Julie","Dag","Vegar","Marte","Rolf","Stian","Sissel","Marit K","Anne H","Trygve","Chantal","Evy","Odd Reidar","Janne"];
+const r36  = [22,22,22,21,21,21,21,21,21,20,20,20,20,20,20,19,19,19,18,18,18,17,17,16,15,14,14];
+
+const rawData = [
+  { navn:"Stine",r12:9,r24:16,r36:21},{ navn:"Sissel",r12:8,r24:11,r36:18},
+  { navn:"Mari K",r12:8,r24:14,r36:21},{ navn:"Eva",r12:7,r24:14,r36:20},
+  { navn:"Rolf",r12:7,r24:12,r36:19},{ navn:"Anniken",r12:7,r24:13,r36:22},
+  { navn:"Trygve",r12:7,r24:14,r36:17},{ navn:"Lars",r12:6,r24:13,r36:22},
+  { navn:"Vegar",r12:6,r24:13,r36:19},{ navn:"Andreas",r12:6,r24:13,r36:22},
+  { navn:"Martin",r12:6,r24:11,r36:20},{ navn:"Sanne",r12:6,r24:13,r36:21},
+  { navn:"Katrine",r12:6,r24:12,r36:21},{ navn:"Pål Tore",r12:6,r24:12,r36:20},
+  { navn:"Julie",r12:6,r24:14,r36:20},{ navn:"John H",r12:6,r24:13,r36:21},
+  { navn:"Evy",r12:6,r24:10,r36:15},{ navn:"Stian",r12:5,r24:12,r36:18},
+  { navn:"Harald",r12:5,r24:12,r36:21},{ navn:"Kjetil",r12:5,r24:12,r36:20},
+  { navn:"Dag",r12:5,r24:12,r36:20},{ navn:"Marit K",r12:4,r24:12,r36:18},
+  { navn:"Chantal",r12:4,r24:11,r36:16},{ navn:"Marte",r12:3,r24:11,r36:19},
+  { navn:"Odd Reidar",r12:3,r24:9,r36:14},{ navn:"Janne",r12:3,r24:7,r36:14},
+  { navn:"Anne H",r12:3,r24:11,r36:17}
+];
+
+// Sort by r36 desc
+const sorted = [...rawData].sort((a,b)=>b.r36-a.r36);
+
+// Rank helper
+function getRanks(arr, key) {
+  const s = [...arr].sort((a,b)=>b[key]-a[key]);
+  const r = {};
+  let rank = 1;
+  s.forEach((d,i)=>{ if(i>0&&d[key]<s[i-1][key]) rank=i+1; r[d.navn]=rank; });
+  return r;
+}
+const rank24 = getRanks(rawData,'r24');
+const rank36 = getRanks(rawData,'r36');
+
+// CHART 1: Oversikt
+new Chart(document.getElementById('chartOversikt'), {
+  type: 'bar',
+  data: {
+    labels: sorted.map(d=>d.navn),
+    datasets: [
+      { label:'12 kamper', data:sorted.map(d=>d.r12), backgroundColor:'#6574f0', borderRadius:3 },
+      { label:'24 kamper', data:sorted.map(d=>d.r24), backgroundColor:'#f7c948', borderRadius:3 },
+      { label:'36 kamper', data:sorted.map(d=>d.r36), backgroundColor:'#2dd4a0', borderRadius:3 },
+    ]
+  },
+  options: {
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false } },
+    scales:{
+      x:{ max:26, grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
+      y:{ grid:{color:'#263352'}, ticks:{color:'#b8c9e0',font:{size:13}} }
+    }
+  }
+});
+
+// CHART 2: Per periode (stacked)
+const sortedByP3 = [...rawData].sort((a,b)=>(b.r36-b.r24)-(a.r36-a.r24));
+new Chart(document.getElementById('chartPeriode'), {
+  type:'bar',
+  data:{
+    labels: sortedByP3.map(d=>d.navn),
+    datasets:[
+      { label:'Periode 1 (1–12)', data:sortedByP3.map(d=>d.r12), backgroundColor:'#6574f0' },
+      { label:'Periode 2 (13–24)', data:sortedByP3.map(d=>d.r24-d.r12), backgroundColor:'#f7c948' },
+      { label:'Periode 3 (25–36)', data:sortedByP3.map(d=>d.r36-d.r24), backgroundColor:'#2dd4a0', borderRadius:3 },
+    ]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false } },
+    scales:{
+      x:{ stacked:true, max:26, grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
+      y:{ stacked:true, grid:{color:'#263352'}, ticks:{color:'#b8c9e0',font:{size:13}} }
+    }
+  }
+});
+
+// CHART 3: Klatring
+const klatring = rawData.map(d=>({
+  navn:d.navn,
+  endring: rank24[d.navn] - rank36[d.navn]
+})).sort((a,b)=>b.endring-a.endring);
+
+new Chart(document.getElementById('chartKlatring'),{
+  type:'bar',
+  data:{
+    labels:klatring.map(d=>d.navn),
+    datasets:[{
+      label:'Plassendring',
+      data:klatring.map(d=>d.endring),
+      backgroundColor:klatring.map(d=>d.endring>=0?'#2dd4a0':'#f25c5c'),
+      borderRadius:3
+    }]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:false } },
+    scales:{
+      x:{ grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
+      y:{ grid:{color:'#263352'}, ticks:{color:'#b8c9e0',font:{size:13}} }
+    }
+  }
+});
+
+// Page switching
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Fact tab switching
+function showFacts(id, btn) {
+  document.querySelectorAll('.fact-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.fact-sub-nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('fact-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
