@@ -210,7 +210,8 @@
 
 <nav>
   <button class="active" onclick="showPage('oversikt', this)">📊 Oversikt</button>
-  <button onclick="showPage('plasseringer', this)">🎢 Plasseringer</button>
+  <button onclick="showPage('plasseringer', this)">🎢 Endring i plassering</button>
+  <button onclick="showPage('poeng', this)">📉 Poenggraf</button>
   <button onclick="showPage('periode', this)">🔥 Per periode</button>
   <button onclick="showPage('klatring', this)">📈 Klatring</button>
   <button onclick="showPage('fakta', this)">🎉 Fun facts</button>
@@ -255,7 +256,7 @@
 
 <!-- PLASSERINGER -->
 <div class="page" id="page-plasseringer">
-  <h2>Plasseringer over tid</h2>
+  <h2>Endring i plassering over tid</h2>
   <p class="page-hint">Klikk på navn for å fremheve – velg flere for å sammenligne · Klikk igjen for å skjule · 1. plass øverst</p>
   <div style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;" id="nameFilters"></div>
   <div style="margin-bottom:10px;">
@@ -263,6 +264,19 @@
   </div>
   <div class="chart-wrap" style="height:780px;">
     <canvas id="chartBump"></canvas>
+  </div>
+</div>
+
+<!-- POENGGRAF -->
+<div class="page" id="page-poeng">
+  <h2>Poenggraf over tid</h2>
+  <p class="page-hint">Klikk på navn for å fremheve – velg flere for å sammenligne · Klikk igjen for å skjule</p>
+  <div style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;" id="nameFiltersPoeng"></div>
+  <div style="margin-bottom:10px;">
+    <button onclick="resetAllPoeng()" style="padding:6px 14px; border-radius:8px; border:1.5px solid #7a91b8; background:#1c2a42; color:#e2eaf7; font-size:0.78rem; cursor:pointer; font-weight:600; transition:all 0.15s;">✕ Nullstill</button>
+  </div>
+  <div class="chart-wrap" style="height:780px;">
+    <canvas id="chartPoeng"></canvas>
   </div>
 </div>
 
@@ -427,6 +441,9 @@ const rawData = [
 // Sort by r36 desc
 const sorted = [...rawData].sort((a,b)=>b.r36-a.r36);
 
+// Alphabetical sort for name buttons
+const sortedAlpha = [...rawData].sort((a,b) => a.navn.localeCompare(b.navn, 'no'));
+
 // Rank helper
 function getRanks(arr, key) {
   const s = [...arr].sort((a,b)=>b[key]-a[key]);
@@ -579,10 +596,139 @@ function togglePerson(navn) {
 
 function resetAll() { activeSet.clear(); updateChart(); }
 
+// POENGGRAF
+const poengLabels = ['Etter 12 kamper','Etter 24 kamper','Etter 36 kamper'];
+const poengDatasets = rawData.map((d,i) => ({
+  label: d.navn,
+  data: [d.r12, d.r24, d.r36],
+  borderColor: palette[i % palette.length],
+  backgroundColor: palette[i % palette.length],
+  borderWidth: 2.5,
+  pointRadius: 5,
+  pointHoverRadius: 8,
+  tension: 0.3,
+  fill: false,
+}));
+
+const poengChart = new Chart(document.getElementById('chartPoeng'), {
+  type: 'line',
+  data: { labels: poengLabels, datasets: poengDatasets },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode:'index', intersect:false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: (items) => items[0].label,
+          label: (item) => ` ${item.dataset.label}: ${item.raw} poeng`,
+        },
+        itemSort: (a,b) => b.raw - a.raw,
+        backgroundColor: '#1c2a42',
+        borderColor: '#263352',
+        borderWidth: 1,
+        titleColor: '#e2eaf7',
+        bodyColor: '#b8c9e0',
+        padding: 10,
+        bodyFont: { size: 11 },
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: '#263352' },
+        ticks: { color: '#b8c9e0', font: { size: 13, weight:'600' } }
+      },
+      y: {
+        min: 0,
+        max: 26,
+        ticks: {
+          stepSize: 2,
+          color: '#7a91b8',
+          font: { size: 11 },
+          callback: (v) => v + ' p'
+        },
+        grid: { color: '#263352' },
+        title: { display:true, text:'Poeng', color:'#7a91b8', font:{size:11} }
+      }
+    }
+  },
+  plugins: [{
+    id: 'endLabelsPoeng',
+    afterDatasetsDraw(chart) {
+      const ctx = chart.ctx;
+      chart.data.datasets.forEach((ds, i) => {
+        const meta = chart.getDatasetMeta(i);
+        if (meta.hidden) return;
+        const lastPoint = meta.data[meta.data.length - 1];
+        if (!lastPoint) return;
+        ctx.save();
+        ctx.font = ds._highlight ? 'bold 12px Segoe UI, system-ui, sans-serif' : '11px Segoe UI, system-ui, sans-serif';
+        ctx.fillStyle = ds.borderColor;
+        ctx.globalAlpha = ds._dimmed ? 0.15 : 1;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(' ' + ds.label, lastPoint.x + 6, lastPoint.y);
+        ctx.restore();
+      });
+    }
+  }]
+});
+
+// Multi-select toggle for poenggraf
+const activeSetPoeng = new Set();
+
+function updatePoengChart() {
+  const anyActive = activeSetPoeng.size > 0;
+  poengChart.data.datasets.forEach((ds,i) => {
+    const isActive = activeSetPoeng.has(ds.label);
+    const full = palette[i % palette.length];
+    ds._highlight = isActive;
+    ds._dimmed = anyActive && !isActive;
+    ds.borderWidth = isActive ? 4 : anyActive ? 1 : 2.5;
+    ds.borderColor = (!anyActive || isActive) ? full : hexToRgba(full, 0.08);
+    ds.pointBackgroundColor = (!anyActive || isActive) ? full : hexToRgba(full, 0.08);
+  });
+  poengChart.update();
+
+  document.querySelectorAll('#nameFiltersPoeng button').forEach(btn => {
+    const isActive = activeSetPoeng.has(btn.dataset.navn);
+    const i = rawData.findIndex(d => d.navn === btn.dataset.navn);
+    const col = palette[i % palette.length];
+    btn.style.background = isActive ? col : 'transparent';
+    btn.style.color = isActive ? '#0b1120' : col;
+    btn.style.fontWeight = isActive ? '700' : '500';
+    btn.style.opacity = (!anyActive || isActive) ? '1' : '0.4';
+  });
+}
+
+function togglePersonPoeng(navn) {
+  if (activeSetPoeng.has(navn)) activeSetPoeng.delete(navn);
+  else activeSetPoeng.add(navn);
+  updatePoengChart();
+}
+
+function resetAllPoeng() { activeSetPoeng.clear(); updatePoengChart(); }
+
+// Build poenggraf name filter buttons
+const containerPoeng = document.getElementById('nameFiltersPoeng');
+sortedAlpha.forEach((d) => {
+  const i = rawData.indexOf(d);
+  const btn = document.createElement('button');
+  btn.textContent = d.navn;
+  btn.dataset.navn = d.navn;
+  btn.style.cssText = `
+    padding:5px 11px; border-radius:100px; border:1.5px solid ${palette[i%palette.length]};
+    background:transparent; color:${palette[i%palette.length]}; font-size:0.73rem;
+    cursor:pointer; font-weight:500; transition:all 0.15s;
+  `;
+  btn.onclick = () => togglePersonPoeng(d.navn);
+  containerPoeng.appendChild(btn);
+});
+
 // Build name filter buttons
 const container = document.getElementById('nameFilters');
 
-const sortedAlpha = [...rawData].sort((a,b) => a.navn.localeCompare(b.navn, 'no'));
 sortedAlpha.forEach((d) => {
   const i = rawData.indexOf(d);
   const btn = document.createElement('button');
