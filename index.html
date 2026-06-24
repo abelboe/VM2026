@@ -209,8 +209,8 @@
 </header>
 
 <nav>
-  <button class="active" onclick="showPage('oversikt', this)">📊 Oversikt</button>
-  <button onclick="showPage('plasseringer', this)">🎢 Endring i plassering</button>
+  <button class="active" onclick="showPage('plasseringer', this)">🎢 Endring i plassering</button>
+  <button onclick="showPage('oversikt', this)">📊 Oversikt</button>
   <button onclick="showPage('poeng', this)">📉 Poenggraf</button>
   <button onclick="showPage('periode', this)">🔥 Per periode</button>
   <button onclick="showPage('klatring', this)">📈 Klatring</button>
@@ -218,7 +218,7 @@
 </nav>
 
 <!-- OVERSIKT -->
-<div class="page active" id="page-oversikt">
+<div class="page" id="page-oversikt">
   <h2>Poeng etter 12, 24 og 36 kamper</h2>
   <p class="page-hint">Sortert etter nåværende plassering</p>
   <div class="legend">
@@ -264,7 +264,7 @@
 </div>
 
 <!-- PLASSERINGER -->
-<div class="page" id="page-plasseringer">
+<div class="page active" id="page-plasseringer">
   <h2>Endring i plassering over tid</h2>
   <p class="page-hint">Klikk på navn for å fremheve – velg flere for å sammenligne · Klikk igjen for å skjule · 1. plass øverst</p>
   <div style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;" id="nameFilters"></div>
