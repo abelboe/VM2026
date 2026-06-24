@@ -249,8 +249,15 @@
 
 <!-- KLATRING -->
 <div class="page" id="page-klatring">
-  <h2>Plassendring – siste periode (24 → 36)</h2>
-  <p class="page-hint">Positiv = klatret opp · Negativ = rykket ned · Siste periode (36 → 48)</p>
+  <h2>Plassendring over tid</h2>
+  <p class="page-hint">Positiv = klatret opp · Negativ = rykket ned</p>
+  <div class="fact-sub-nav" id="klatringNav">
+    <button onclick="visKlatring('p1', this)">Periode 1</button>
+    <button onclick="visKlatring('p2', this)">Periode 2</button>
+    <button onclick="visKlatring('p3', this)">Periode 3</button>
+    <button class="active" onclick="visKlatring('p4', this)">Periode 4</button>
+    <button onclick="visKlatring('alt', this)">Fra start til nå</button>
+  </div>
   <div class="chart-wrap chart-tall">
     <canvas id="chartKlatring"></canvas>
   </div>
@@ -839,32 +846,67 @@ new Chart(document.getElementById('chartPeriode'), {
   }
 });
 
-// CHART 3: Klatring
-const klatring = rawData.map(d=>({
-  navn:d.navn,
-  endring: rank36[d.navn] - rank48[d.navn]
-})).sort((a,b)=>b.endring-a.endring);
+// CHART 3: Klatring – dynamisk per periode
+const klatringPerioder = {
+  p1: rawData.map(d => ({ navn: d.navn, endring: rank12[d.navn] - rank12[d.navn] })), // placeholder, egentlig ikke meningsfull
+  p2: rawData.map(d => ({ navn: d.navn, endring: rank12[d.navn] - rank24[d.navn] })),
+  p3: rawData.map(d => ({ navn: d.navn, endring: rank24[d.navn] - rank36[d.navn] })),
+  p4: rawData.map(d => ({ navn: d.navn, endring: rank36[d.navn] - rank48[d.navn] })),
+  alt: rawData.map(d => ({ navn: d.navn, endring: rank12[d.navn] - rank48[d.navn] })),
+};
 
-new Chart(document.getElementById('chartKlatring'),{
-  type:'bar',
-  data:{
-    labels:klatring.map(d=>d.navn),
-    datasets:[{
-      label:'Plassendring',
-      data:klatring.map(d=>d.endring),
-      backgroundColor:klatring.map(d=>d.endring>=0?'#2dd4a0':'#f25c5c'),
-      borderRadius:3
-    }]
-  },
-  options:{
-    indexAxis:'y', responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{ display:false } },
-    scales:{
-      x:{ grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
-      y:{ grid:{color:'#263352'}, ticks:{color:'#b8c9e0',font:{size:13}} }
+// p1 gir ingen meningsfull endring (ingen "før"), vis heller absolutt plassering omvendt
+klatringPerioder.p1 = rawData.map(d => ({ navn: d.navn, endring: 28 - rank12[d.navn] }));
+
+const klatringLabels = {
+  p1: 'Plassering etter periode 1 (høyest = best)',
+  p2: 'Plassendring: periode 1 → 2',
+  p3: 'Plassendring: periode 2 → 3',
+  p4: 'Plassendring: periode 3 → 4',
+  alt: 'Plassendring totalt: start → nå',
+};
+
+function lagKlatringSortering(periode) {
+  return [...klatringPerioder[periode]].sort((a,b) => b.endring - a.endring);
+}
+
+const klatringChart = new Chart(document.getElementById('chartKlatring'), {
+  type: 'bar',
+  data: (() => {
+    const s = lagKlatringSortering('p4');
+    return {
+      labels: s.map(d => d.navn),
+      datasets: [{ label:'Plassendring', data: s.map(d => d.endring), backgroundColor: s.map(d => d.endring >= 0 ? '#2dd4a0' : '#f25c5c'), borderRadius: 3 }]
+    };
+  })(),
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: { label: (item) => ` ${item.raw > 0 ? '+' : ''}${item.raw} plasser` },
+        backgroundColor: '#1c2a42', borderColor: '#263352', borderWidth: 1,
+        titleColor: '#e2eaf7', bodyColor: '#b8c9e0', padding: 10,
+      }
+    },
+    scales: {
+      x: { grid: { color: '#263352' }, ticks: { color: '#7a91b8', font: { size: 12 } } },
+      y: { grid: { color: '#263352' }, ticks: { color: '#b8c9e0', font: { size: 13 } } }
     }
   }
 });
+
+function visKlatring(periode, btn) {
+  const sorted = lagKlatringSortering(periode);
+  klatringChart.data.labels = sorted.map(d => d.navn);
+  klatringChart.data.datasets[0].data = sorted.map(d => d.endring);
+  klatringChart.data.datasets[0].backgroundColor = sorted.map(d => d.endring >= 0 ? '#2dd4a0' : '#f25c5c');
+  klatringChart.update();
+
+  document.querySelector('.page-hint').textContent = 'Positiv = klatret opp · Negativ = rykket ned · ' + klatringLabels[periode];
+  document.querySelectorAll('#klatringNav button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
 
 // Page switching
 function showPage(id, btn) {
