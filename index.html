@@ -204,8 +204,8 @@
 
 <header>
   <h1>⚽ Kulturenhetens VM-<span>tipping</span> 2026</h1>
-  <p class="subtitle">Etter 12, 24, 36, 48 og 60 kamper</p>
-  <div class="leader-badge">🥇 Lars leder med 38 poeng!</div>
+  <p class="subtitle">Etter 72 kamper – 8 bonuspoeng gjenstår! 🔥</p>
+  <div class="leader-badge">🥇 Lars, Harald og John H leder med 46 poeng – for nå!</div>
 </header>
 
 <nav>
@@ -227,6 +227,7 @@
     <span><span class="legend-dot" style="background:#2dd4a0"></span>36 kamper</span>
     <span><span class="legend-dot" style="background:#f472b6"></span>48 kamper</span>
     <span><span class="legend-dot" style="background:#fb923c"></span>60 kamper</span>
+    <span><span class="legend-dot" style="background:#38bdf8"></span>72 kamper</span>
   </div>
   <div class="chart-wrap chart-tall">
     <canvas id="chartOversikt"></canvas>
@@ -236,13 +237,14 @@
 <!-- PERIODE -->
 <div class="page" id="page-periode">
   <h2>Poeng per periode</h2>
-  <p class="page-hint">Hva scoret alle i kamp 1–12, 13–24, 25–36, 37–48 og 49–60?</p>
+  <p class="page-hint">Hva scoret alle i kamp 1–12, 13–24, 25–36, 37–48, 49–60 og 61–72?</p>
   <div class="legend">
     <span><span class="legend-dot" style="background:#6574f0"></span>Periode 1</span>
     <span><span class="legend-dot" style="background:#f7c948"></span>Periode 2</span>
     <span><span class="legend-dot" style="background:#2dd4a0"></span>Periode 3</span>
     <span><span class="legend-dot" style="background:#f472b6"></span>Periode 4</span>
     <span><span class="legend-dot" style="background:#fb923c"></span>Periode 5</span>
+    <span><span class="legend-dot" style="background:#38bdf8"></span>Periode 6</span>
   </div>
   <div class="chart-wrap chart-tall">
     <canvas id="chartPeriode"></canvas>
@@ -258,7 +260,8 @@
     <button onclick="visKlatring('p2', this)">Periode 2</button>
     <button onclick="visKlatring('p3', this)">Periode 3</button>
     <button onclick="visKlatring('p4', this)">Periode 4</button>
-    <button class="active" onclick="visKlatring('p5', this)">Periode 5</button>
+    <button onclick="visKlatring('p5', this)">Periode 5</button>
+    <button class="active" onclick="visKlatring('p6', this)">Periode 6</button>
     <button onclick="visKlatring('alt', this)">Fra start til nå</button>
   </div>
   <div class="chart-wrap chart-tall">
@@ -303,6 +306,8 @@
     <button onclick="showFacts('f36', this)">36 kamper</button>
     <button onclick="showFacts('f48', this)">48 kamper</button>
     <button onclick="showFacts('f60', this)">60 kamper</button>
+    <button onclick="showFacts('f72', this)">72 kamper 🏟️</button>
+    <button onclick="showFacts('fbonus', this)">Bonuspoeng 🎯</button>
     <button onclick="showFacts('falt', this)">Helhetlig</button>
   </div>
 
@@ -454,43 +459,91 @@
     </div>
   </div>
 
+  <!-- 72 kamper -->
+  <div class="fact-section" id="fact-f72">
+    <div class="fact-card" style="border-color:#f7c948">
+      <div class="fact-head"><span class="fact-emoji">🏟️</span><span class="fact-title" style="color:#f7c948">Ledere etter 72 kamper</span></div>
+      <p><b>Lars, Harald og John H</b> deler ledelsen med <b>46 poeng</b> – men 8 bonuspoeng gjenstår, så dette kan fortsatt snu seg!</p>
+    </div>
+    <div class="fact-card" style="border-color:#38bdf8">
+      <div class="fact-head"><span class="fact-emoji">👑</span><span class="fact-title" style="color:#38bdf8">Rundekonger periode 6</span></div>
+      <p><b>Rolf og John H</b> klinket til med svimlende <b>11 av 12 mulige poeng</b> i siste runde – soleklar runderekord gjennom hele turneringen!</p>
+    </div>
+    <div class="fact-card" style="border-color:#2dd4a0">
+      <div class="fact-head"><span class="fact-emoji">📈</span><span class="fact-title" style="color:#2dd4a0">Største klatring siste runde</span></div>
+      <p><b>John H</b> leverte en formidabel sluttspurt og klatret <b>9 plasser</b> i siste periode – fra 14. til 1. plass. <b>Rolf</b> klatret 10 plasser og endte på delt 4. plass.</p>
+    </div>
+    <div class="fact-card" style="border-color:#a78bfa">
+      <div class="fact-head"><span class="fact-emoji">🏘️</span><span class="fact-title" style="color:#a78bfa">Ekstremt jevnt felt</span></div>
+      <p>Fra 1. til 14. plass er det bare <b>5 poeng</b>. Over halvparten av feltet befinner seg mellom 39 og 46 poeng – og bonuspoengene kan snu rekkefølgen drastisk!</p>
+    </div>
+    <div class="fact-card" style="border-color:#fb923c">
+      <div class="fact-head"><span class="fact-emoji">🎲</span><span class="fact-title" style="color:#fb923c">Ingen alene på bunn</span></div>
+      <p><b>Odd Reidar og Janne</b> deler 26. plass med 32 poeng – begge unngår å stå alene på bunn. En liten trøst!</p>
+    </div>
+  </div>
+
+  <!-- Bonuspoeng -->
+  <div class="fact-section" id="fact-fbonus">
+    <div class="fact-card" style="border-color:#f7c948">
+      <div class="fact-head"><span class="fact-emoji">🏆</span><span class="fact-title" style="color:#f7c948">Hvem vinner VM? (5 poeng)</span></div>
+      <p><b>Spania</b> er favoritt blant dere – <b>12 stykker</b> har tippet dem. <b>Frankrike</b> er nest mest populær med 10 tips. <b>Tyskland</b> har 3 tippere, mens Argentina og Brasil har 1 hver. En Spania-seier vil altså gi 5 bonuspoeng til 12 av 27 deltakere!</p>
+    </div>
+    <div class="fact-card" style="border-color:#6574f0">
+      <div class="fact-head"><span class="fact-emoji">🥈</span><span class="fact-title" style="color:#6574f0">Andre finalist (1 poeng)</span></div>
+      <p><b>Frankrike</b> dominerer også her med <b>10 tips</b>. Deretter følger Argentina (6), Brasil (4), USA (2), Tyskland (2), Spania (2) – og én optimistisk sjel som har tippet <b>Norge</b>! Det er 1 bonuspoeng for riktig finalist uavhengig av hvem som vinner.</p>
+    </div>
+    <div class="fact-card" style="border-color:#2dd4a0">
+      <div class="fact-head"><span class="fact-emoji">🇳🇴</span><span class="fact-title" style="color:#2dd4a0">Hvor langt kommer Norge? (2 poeng)</span></div>
+      <p>Flest tror på <b>1/8-finale</b> med 10 tips. <b>1/16</b> har 7 tips. <b>Kvartfinale</b> har 6 optimister. Halvfinale har 2, og hele <b>1 person tror på norsk finale</b>! Én enkelt har tippet at Norge ryker allerede i gruppespillet.</p>
+    </div>
+    <div class="fact-card" style="border-color:#f472b6">
+      <div class="fact-head"><span class="fact-emoji">💡</span><span class="fact-title" style="color:#f472b6">Hva kan snu alt?</span></div>
+      <p>Med <b>8 bonuspoeng</b> mulig kan alle fra 1. til omtrent 20. plass potensielt snu resultatet. En Spania-seier gir 5 poeng til 12 deltakere – nok til at mange kan hoppe over dagens ledere. Det er langt fra over!</p>
+    </div>
+    <div class="fact-card" style="border-color:#fb923c">
+      <div class="fact-head"><span class="fact-emoji">🤝</span><span class="fact-title" style="color:#fb923c">Spania vs. Frankrike – det store showdownet</span></div>
+      <p>En Spania-seier over Frankrike i finalen vil gi <b>5+1 = 6 bonuspoeng</b> til de som tippet begge riktig. Omvendt gir en Frankrike-seier 5+1 til Frankrike-tipperne. Det er duellen som avgjør turneringen!</p>
+    </div>
+  </div>
+
   <!-- Helhetlig -->
   <div class="fact-section" id="fact-falt">
     <div class="fact-card" style="border-color:#f7c948">
-      <div class="fact-head"><span class="fact-emoji">🏆</span><span class="fact-title" style="color:#f7c948">Mest konsistent i topp</span></div>
-      <p><b>Lars</b> har aldri vært utenfor topp 8 i noen av de fem rundene og leder nå alene. <b>Andreas</b> er like konsistent og har fulgt rett bak hele veien.</p>
+      <div class="fact-head"><span class="fact-emoji">🏆</span><span class="fact-title" style="color:#f7c948">Vinnere av gruppespillet</span></div>
+      <p><b>Lars, Harald og John H</b> deler toppen med 46 poeng. Lars var stabil helt fra start. Harald klatret jevnt. John H kom som en rakett i siste runde.</p>
+    </div>
+    <div class="fact-card" style="border-color:#38bdf8">
+      <div class="fact-head"><span class="fact-emoji">👑</span><span class="fact-title" style="color:#38bdf8">Runderekord for alltid</span></div>
+      <p><b>Rolf og John H</b> setter runderekorden med <b>11 av 12 mulige poeng</b> i periode 6. Dette er det høyeste noen har scoret i én enkelt periode gjennom hele turneringen.</p>
     </div>
     <div class="fact-card" style="border-color:#f25c5c">
       <div class="fact-head"><span class="fact-emoji">🎢</span><span class="fact-title" style="color:#f25c5c">Mest berg-og-dalbane</span></div>
-      <p><b>Trygve</b>: 4. → 2. → 22. → 23. → 17. plass. Han stupte dramatisk og begynner nå å klatre igjen. <b>Sissel</b>: 2. → 20. → 19. → 23. → 24. plass – bare nedover.</p>
+      <p><b>Trygve</b>: 4. → 2. → 22. → 23. → 17. → 19. plass. Historisk nedtur midt i VM, fulgt av en delvis opphenting. <b>Sissel</b>: 2. → 20. → 19. → 23. → 24. → 23. plass – aldri kommet tilbake til toppen.</p>
     </div>
     <div class="fact-card" style="border-color:#2dd4a0">
       <div class="fact-head"><span class="fact-emoji">📈</span><span class="fact-title" style="color:#2dd4a0">Best samlet klatring</span></div>
-      <p><b>Chantal</b> gikk fra 22. plass etter 12 kamper til 17. plass nå – og klatret hele 7 plasser i siste periode alene. <b>Marte</b> har også klatret jevnt fra bunn til midtsjikt.</p>
+      <p><b>John H</b> klatret fra 8. plass etter 12 kamper til delt 1. plass til slutt – <b>7 plasser opp totalt</b>, og det meste kom i siste periode. <b>Rolf</b> klatret fra 4. til delt 4. plass med samme drama i sluttspurten.</p>
     </div>
     <div class="fact-card" style="border-color:#f97316">
       <div class="fact-head"><span class="fact-emoji">📉</span><span class="fact-title" style="color:#f97316">Størst totalt fall</span></div>
-      <p><b>Evy</b> gikk fra 8. plass etter 12 kamper til 24. plass nå – et fall på <b>16 plasser</b> totalt. <b>Sissel</b> falt fra 2. til 24. plass.</p>
+      <p><b>Evy</b> gikk fra 8. plass etter 12 kamper til 25. plass til slutt – et fall på <b>17 plasser</b>. <b>Stine</b> gikk fra 1. plass til 19. plass – imponerende leder i starten, men falt gradvis.</p>
     </div>
     <div class="fact-card" style="border-color:#fb923c">
       <div class="fact-head"><span class="fact-emoji">🔥</span><span class="fact-title" style="color:#fb923c">Varmest siste periode</span></div>
-      <p><b>Chantal og Trygve</b> scoret begge <b>9 poeng</b> i periode 5 – felles best i runden og begge klatret markant.</p>
-    </div>
-    <div class="fact-card" style="border-color:#38bdf8">
-      <div class="fact-head"><span class="fact-emoji">🧊</span><span class="fact-title" style="color:#38bdf8">Kaldest siste periode</span></div>
-      <p><b>Odd Reidar og Janne</b> er fortsatt i bunn og scoret lite i periode 5. Begge deler sisteplass med <b>26 poeng</b>.</p>
+      <p><b>Rolf og John H</b> leverte begge <b>11 poeng</b> i periode 6 – felles beste i hele turneringen, i den viktigste runden.</p>
     </div>
     <div class="fact-card" style="border-color:#a78bfa">
-      <div class="fact-head"><span class="fact-emoji">🎯</span><span class="fact-title" style="color:#a78bfa">Aldri vært i bunn 10</span></div>
-      <p><b>Lars og Andreas</b> har aldri vært utenfor topp 8 i noen runde. Den mest stabile duoen gjennom hele turneringen.</p>
+      <div class="fact-head"><span class="fact-emoji">🎯</span><span class="fact-title" style="color:#a78bfa">Mest konsistent gjennom hele VM</span></div>
+      <p><b>Lars</b> har aldri vært utenfor topp 8 i noen av de seks periodene. Den mest stabile prestasjonen gjennom hele gruppespillet.</p>
     </div>
     <div class="fact-card" style="border-color:#7a91b8">
       <div class="fact-head"><span class="fact-emoji">😬</span><span class="fact-title" style="color:#7a91b8">Aldri vært i topp 15</span></div>
-      <p><b>Janne og Odd Reidar</b> har ikke vært inne i topp 15 i noen av de fem rundene. Konsekvent i bunnsjiktet gjennom hele VM.</p>
+      <p><b>Janne og Odd Reidar</b> har ikke vært inne i topp 15 i noen av de seks periodene. Konsekvent i bunnsjiktet gjennom hele VM – men deler skjebnen så de slipper sisteplass alene.</p>
     </div>
     <div class="fact-card" style="border-color:#2dd4a0">
-      <div class="fact-head"><span class="fact-emoji">🔭</span><span class="fact-title" style="color:#2dd4a0">Siste spurt!</span></div>
-      <p>Kun <b>12 kamper gjenstår</b> og 5 poeng skiller 1. fra 17. plass. Dette er ikke avgjort før siste kamp er spilt!</p>
+      <div class="fact-head"><span class="fact-emoji">🔭</span><span class="fact-title" style="color:#2dd4a0">Og nå?</span></div>
+      <p>8 bonuspoeng gjenstår for riktig vinner, finalist og Norges plassering. Alt kan fortsatt snus – men det krever at du traff på de store spørsmålene! Lykke til alle! 🍀</p>
     </div>
   </div>
 </div>
@@ -500,37 +553,37 @@ const navn = ["Lars","Andreas","Anniken","Harald","Sanne","Mari K","Katrine","St
 const r36  = [22,22,22,21,21,21,21,21,21,20,20,20,20,20,20,19,19,19,18,18,18,17,17,16,15,14,14];
 
 const rawData = [
-  { navn:"Stine",      r12:9, r24:16, r36:21, r48:28, r60:33},
-  { navn:"Sissel",     r12:8, r24:11, r36:18, r48:24, r60:28},
-  { navn:"Mari K",     r12:8, r24:14, r36:21, r48:29, r60:36},
-  { navn:"Eva",        r12:7, r24:14, r36:20, r48:28, r60:34},
-  { navn:"Rolf",       r12:7, r24:12, r36:19, r48:28, r60:34},
-  { navn:"Anniken",    r12:7, r24:13, r36:22, r48:30, r60:36},
-  { navn:"Trygve",     r12:7, r24:14, r36:17, r48:24, r60:33},
-  { navn:"Lars",       r12:6, r24:13, r36:22, r48:31, r60:38},
-  { navn:"Vegar",      r12:6, r24:13, r36:19, r48:27, r60:33},
-  { navn:"Andreas",    r12:6, r24:13, r36:22, r48:31, r60:37},
-  { navn:"Martin",     r12:6, r24:11, r36:20, r48:28, r60:34},
-  { navn:"Sanne",      r12:6, r24:13, r36:21, r48:28, r60:35},
-  { navn:"Katrine",    r12:6, r24:12, r36:21, r48:29, r60:34},
-  { navn:"Pål Tore",   r12:6, r24:12, r36:20, r48:29, r60:35},
-  { navn:"Julie",      r12:6, r24:14, r36:20, r48:27, r60:35},
-  { navn:"John H",     r12:6, r24:13, r36:21, r48:29, r60:35},
-  { navn:"Evy",        r12:6, r24:10, r36:15, r48:20, r60:28},
-  { navn:"Stian",      r12:5, r24:12, r36:18, r48:27, r60:34},
-  { navn:"Harald",     r12:5, r24:12, r36:21, r48:29, r60:37},
-  { navn:"Kjetil",     r12:5, r24:12, r36:20, r48:28, r60:35},
-  { navn:"Dag",        r12:5, r24:12, r36:20, r48:28, r60:34},
-  { navn:"Marit K",    r12:4, r24:12, r36:18, r48:25, r60:31},
-  { navn:"Chantal",    r12:4, r24:11, r36:16, r48:25, r60:33},
-  { navn:"Marte",      r12:3, r24:11, r36:19, r48:25, r60:31},
-  { navn:"Odd Reidar", r12:3, r24:9,  r36:14, r48:24, r60:26},
-  { navn:"Janne",      r12:3, r24:7,  r36:14, r48:21, r60:26},
-  { navn:"Anne H",     r12:3, r24:11, r36:17, r48:25, r60:30},
+  { navn:"Stine",      r12:9, r24:16, r36:21, r48:28, r60:33, r72:39},
+  { navn:"Sissel",     r12:8, r24:11, r36:18, r48:24, r60:28, r72:36},
+  { navn:"Mari K",     r12:8, r24:14, r36:21, r48:29, r60:36, r72:43},
+  { navn:"Eva",        r12:7, r24:14, r36:20, r48:28, r60:34, r72:42},
+  { navn:"Rolf",       r12:7, r24:12, r36:19, r48:28, r60:34, r72:45},
+  { navn:"Anniken",    r12:7, r24:13, r36:22, r48:30, r60:36, r72:44},
+  { navn:"Trygve",     r12:7, r24:14, r36:17, r48:24, r60:33, r72:39},
+  { navn:"Lars",       r12:6, r24:13, r36:22, r48:31, r60:38, r72:46},
+  { navn:"Vegar",      r12:6, r24:13, r36:19, r48:27, r60:33, r72:40},
+  { navn:"Andreas",    r12:6, r24:13, r36:22, r48:31, r60:37, r72:45},
+  { navn:"Martin",     r12:6, r24:11, r36:20, r48:28, r60:34, r72:41},
+  { navn:"Sanne",      r12:6, r24:13, r36:21, r48:28, r60:35, r72:43},
+  { navn:"Katrine",    r12:6, r24:12, r36:21, r48:29, r60:34, r72:42},
+  { navn:"Pål Tore",   r12:6, r24:12, r36:20, r48:29, r60:35, r72:43},
+  { navn:"Julie",      r12:6, r24:14, r36:20, r48:27, r60:35, r72:44},
+  { navn:"John H",     r12:6, r24:13, r36:21, r48:29, r60:35, r72:46},
+  { navn:"Evy",        r12:6, r24:10, r36:15, r48:20, r60:28, r72:35},
+  { navn:"Stian",      r12:5, r24:12, r36:18, r48:27, r60:34, r72:41},
+  { navn:"Harald",     r12:5, r24:12, r36:21, r48:29, r60:37, r72:46},
+  { navn:"Kjetil",     r12:5, r24:12, r36:20, r48:28, r60:35, r72:42},
+  { navn:"Dag",        r12:5, r24:12, r36:20, r48:28, r60:34, r72:39},
+  { navn:"Marit K",    r12:4, r24:12, r36:18, r48:25, r60:31, r72:40},
+  { navn:"Chantal",    r12:4, r24:11, r36:16, r48:25, r60:33, r72:41},
+  { navn:"Marte",      r12:3, r24:11, r36:19, r48:25, r60:31, r72:37},
+  { navn:"Odd Reidar", r12:3, r24:9,  r36:14, r48:24, r60:26, r72:32},
+  { navn:"Janne",      r12:3, r24:7,  r36:14, r48:21, r60:26, r72:32},
+  { navn:"Anne H",     r12:3, r24:11, r36:17, r48:25, r60:30, r72:36},
 ];
 
-// Sort by r60 desc
-const sorted = [...rawData].sort((a,b)=>b.r60-a.r60);
+// Sort by r72 desc
+const sorted = [...rawData].sort((a,b)=>b.r72-a.r72);
 
 // Alphabetical sort for name buttons
 const sortedAlpha = [...rawData].sort((a,b) => a.navn.localeCompare(b.navn, 'no'));
@@ -548,6 +601,7 @@ const rank24 = getRanks(rawData,'r24');
 const rank36 = getRanks(rawData,'r36');
 const rank48 = getRanks(rawData,'r48');
 const rank60 = getRanks(rawData,'r60');
+const rank72 = getRanks(rawData,'r72');
 
 // 27 distinctive colors
 const palette = [
@@ -560,10 +614,10 @@ const palette = [
 ];
 
 // BUMP CHART
-const bumplabels = ['Etter 12 kamper','Etter 24 kamper','Etter 36 kamper','Etter 48 kamper','Etter 60 kamper'];
+const bumplabels = ['Etter 12 kamper','Etter 24 kamper','Etter 36 kamper','Etter 48 kamper','Etter 60 kamper','Etter 72 kamper'];
 const bumpDatasets = rawData.map((d,i) => ({
   label: d.navn,
-  data: [rank12[d.navn], rank24[d.navn], rank36[d.navn], rank48[d.navn], rank60[d.navn]],
+  data: [rank12[d.navn], rank24[d.navn], rank36[d.navn], rank48[d.navn], rank60[d.navn], rank72[d.navn]],
   borderColor: palette[i % palette.length],
   backgroundColor: palette[i % palette.length],
   borderWidth: 2.5,
@@ -690,10 +744,10 @@ function togglePerson(navn) {
 function resetAll() { activeSet.clear(); updateChart(); }
 
 // POENGGRAF
-const poengLabels = ['Etter 12 kamper','Etter 24 kamper','Etter 36 kamper','Etter 48 kamper','Etter 60 kamper'];
+const poengLabels = ['Etter 12 kamper','Etter 24 kamper','Etter 36 kamper','Etter 48 kamper','Etter 60 kamper','Etter 72 kamper'];
 const poengDatasets = rawData.map((d,i) => ({
   label: d.navn,
-  data: [d.r12, d.r24, d.r36, d.r48, d.r60],
+  data: [d.r12, d.r24, d.r36, d.r48, d.r60, d.r72],
   borderColor: palette[i % palette.length],
   backgroundColor: palette[i % palette.length],
   borderWidth: 2.5,
@@ -734,7 +788,7 @@ const poengChart = new Chart(document.getElementById('chartPoeng'), {
       },
       y: {
         min: 0,
-        max: 44,
+        max: 56,
         ticks: {
           stepSize: 2,
           color: '#7a91b8',
@@ -849,37 +903,39 @@ new Chart(document.getElementById('chartOversikt'), {
       { label:'36 kamper', data:sorted.map(d=>d.r36), backgroundColor:'#2dd4a0', borderRadius:3 },
       { label:'48 kamper', data:sorted.map(d=>d.r48), backgroundColor:'#f472b6', borderRadius:3 },
       { label:'60 kamper', data:sorted.map(d=>d.r60), backgroundColor:'#fb923c', borderRadius:3 },
+      { label:'72 kamper', data:sorted.map(d=>d.r72), backgroundColor:'#38bdf8', borderRadius:3 },
     ]
   },
   options: {
     indexAxis:'y', responsive:true, maintainAspectRatio:false,
     plugins:{ legend:{ display:false } },
     scales:{
-      x:{ max:44, grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
+      x:{ max:56, grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
       y:{ grid:{color:'#263352'}, ticks:{color:'#b8c9e0',font:{size:13}} }
     }
   }
 });
 
 // CHART 2: Per periode (stacked)
-const sortedByP5 = [...rawData].sort((a,b)=>(b.r60-b.r48)-(a.r60-a.r48));
+const sortedByP6 = [...rawData].sort((a,b)=>(b.r72-b.r60)-(a.r72-a.r60));
 new Chart(document.getElementById('chartPeriode'), {
   type:'bar',
   data:{
-    labels: sortedByP5.map(d=>d.navn),
+    labels: sortedByP6.map(d=>d.navn),
     datasets:[
-      { label:'Periode 1 (1–12)',  data:sortedByP5.map(d=>d.r12),       backgroundColor:'#6574f0' },
-      { label:'Periode 2 (13–24)', data:sortedByP5.map(d=>d.r24-d.r12), backgroundColor:'#f7c948' },
-      { label:'Periode 3 (25–36)', data:sortedByP5.map(d=>d.r36-d.r24), backgroundColor:'#2dd4a0' },
-      { label:'Periode 4 (37–48)', data:sortedByP5.map(d=>d.r48-d.r36), backgroundColor:'#f472b6' },
-      { label:'Periode 5 (49–60)', data:sortedByP5.map(d=>d.r60-d.r48), backgroundColor:'#fb923c', borderRadius:3 },
+      { label:'Periode 1 (1–12)',  data:sortedByP6.map(d=>d.r12),       backgroundColor:'#6574f0' },
+      { label:'Periode 2 (13–24)', data:sortedByP6.map(d=>d.r24-d.r12), backgroundColor:'#f7c948' },
+      { label:'Periode 3 (25–36)', data:sortedByP6.map(d=>d.r36-d.r24), backgroundColor:'#2dd4a0' },
+      { label:'Periode 4 (37–48)', data:sortedByP6.map(d=>d.r48-d.r36), backgroundColor:'#f472b6' },
+      { label:'Periode 5 (49–60)', data:sortedByP6.map(d=>d.r60-d.r48), backgroundColor:'#fb923c' },
+      { label:'Periode 6 (61–72)', data:sortedByP6.map(d=>d.r72-d.r60), backgroundColor:'#38bdf8', borderRadius:3 },
     ]
   },
   options:{
     indexAxis:'y', responsive:true, maintainAspectRatio:false,
     plugins:{ legend:{ display:false } },
     scales:{
-      x:{ stacked:true, max:44, grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
+      x:{ stacked:true, max:56, grid:{color:'#263352'}, ticks:{color:'#7a91b8',font:{size:12}} },
       y:{ stacked:true, grid:{color:'#263352'}, ticks:{color:'#b8c9e0',font:{size:13}} }
     }
   }
@@ -892,7 +948,8 @@ const klatringPerioder = {
   p3: rawData.map(d => ({ navn: d.navn, endring: rank24[d.navn] - rank36[d.navn] })),
   p4: rawData.map(d => ({ navn: d.navn, endring: rank36[d.navn] - rank48[d.navn] })),
   p5: rawData.map(d => ({ navn: d.navn, endring: rank48[d.navn] - rank60[d.navn] })),
-  alt: rawData.map(d => ({ navn: d.navn, endring: rank12[d.navn] - rank60[d.navn] })),
+  p6: rawData.map(d => ({ navn: d.navn, endring: rank60[d.navn] - rank72[d.navn] })),
+  alt: rawData.map(d => ({ navn: d.navn, endring: rank12[d.navn] - rank72[d.navn] })),
 };
 
 const klatringLabels = {
@@ -901,7 +958,8 @@ const klatringLabels = {
   p3: 'Plassendring: periode 2 → 3',
   p4: 'Plassendring: periode 3 → 4',
   p5: 'Plassendring: periode 4 → 5',
-  alt: 'Plassendring totalt: start → nå',
+  p6: 'Plassendring: periode 5 → 6 (siste runde)',
+  alt: 'Plassendring totalt: start → slutt',
 };
 
 function lagKlatringSortering(periode) {
@@ -911,7 +969,7 @@ function lagKlatringSortering(periode) {
 const klatringChart = new Chart(document.getElementById('chartKlatring'), {
   type: 'bar',
   data: (() => {
-    const s = lagKlatringSortering('p5');
+    const s = lagKlatringSortering('p6');
     return {
       labels: s.map(d => d.navn),
       datasets: [{ label:'Plassendring', data: s.map(d => d.endring), backgroundColor: s.map(d => d.endring >= 0 ? '#2dd4a0' : '#f25c5c'), borderRadius: 3 }]
